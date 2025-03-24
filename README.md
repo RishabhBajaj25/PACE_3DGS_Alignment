@@ -17,7 +17,7 @@ This project performs the alignment of two Gaussian splats in either the visible
    Run `project_2_image.py` to project $(X_1)$ onto $(I_{\text{close}}^{M1} $).
 
 5. **Find matching points between query and closest image**  
-   Run `closest_feature_matcher.py` to detect points in $(I_{\text{query}}^{M2}$) that match the projected points in \( I_{\text{close}}^{M1} \).
+   Run `closest_feature_matcher.py` to detect points in $(I_{\text{query}}^{M2}$) that match the projected points in $( I_{\text{close}}^{M1} $).
 
 **TODO:** 
 
