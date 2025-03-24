@@ -8,7 +8,7 @@ This project performs the alignment of two Gaussian splats in either the visible
    Run `extract_img_frames.py` to extract image frames.
 
 2. **Run COLMAP**  
-   Define the path to the images and the output path. Ensure that the camera model is set to **pinhole**.
+   Define the path to the images and the output path. Ensure that the camera model is set to **pinhole**. Put images directly in the directory, DONOT create an `images` folder (creates problems with dense recon).
 
 3. **Retrieve the closest images**  
    Select a query image from **M2** (denoted as $( I_{\text{query}}^{M2} ))$ and run `image_retrieval_efficient_net_annoy.py` to find the closest images from **M1**.
@@ -22,6 +22,6 @@ This project performs the alignment of two Gaussian splats in either the visible
 **TODO:** 
 
 * Triangulate the common points in $( I_{\text{close}} $) and $( I_{\text{query}} $) to get their 3D positions, $( X_{\text{common}} $).
-* **Estimate pose using PnP**: Use `solvePnPRANSAC(X_common, x_common_M2, K, distCoeffs)` to estimate the rotation and translation vectors.
+* **Estimate pose using PnP**: Use `solvePnPRANSAC(X_common, x_common_M2, K2, distCoeffs)` to estimate the rotation and translation vectors.
 * **Determine scale from camera positions**: Develop a method to compute scales using camera positions.
 
