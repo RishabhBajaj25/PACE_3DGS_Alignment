@@ -8,8 +8,31 @@ This project performs the alignment of two Gaussian splats in either the visible
    Run `extract_img_frames.py` to extract image frames.
 
 2. **Run COLMAP**  
-   Define the path to the images and the output path. Ensure that the camera model is set to **pinhole**. Put images directly in the directory, DONOT create an `images` folder (creates problems with dense recon).
+   * Define the path to the images and the output path. 
+   * Ensure that the camera model is set to **pinhole**. 
+   * Put images directly in the directory, DONOT create an `images` folder (creates problems with dense recon).
+   * Directory structure should be as follows. If needed, make a folder named `0` and cut/paste the .bin files into it.
+   ```
+   project/
+   ├── images/
+   ├── sparse/
+   │   └── 0/
+   │       ├── cameras.bin
+   │       ├── images.bin
+   │       └── points3d.bin
+   ├── stereo/
+   ├── db.db
+   ├── frame_0000.jpg
+   ├── frame_0001.jpg
+   ...
+   ├── frame_0042.jpg
+   ├── Fused.ply
+   ├── Fused.ply.vis
+   ├── run-colmap-geometric.sh
+   └── run-colmap-photometric.sh
+   ```
 
+    
 3. **Retrieve the closest images**  
    Select a query image from **M2** (denoted as $( I_{\text{query}}^{M2} ))$ and run `image_retrieval_efficient_net_annoy.py` to find the closest images from **M1**.
 
