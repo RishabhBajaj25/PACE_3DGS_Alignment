@@ -4,16 +4,14 @@ import numpy as np
 import os
 import csv
 
-# File to project Structure-from-Motion (SfM) points back onto an image.
-
 # Load the reconstruction from the specified directory.
 reconstruction = pycolmap.Reconstruction(
-    "/media/rishabh/SSD_1/Data/lab_videos_reg/1_20250324_120708_frames_10_fps/dense/0/sparse"
+    "/media/rishabh/SSD_1/Data/lab_videos_reg/1_b_20250324_120708_frames_10_fps/sparse/0"
 )
 
 # Write the reconstruction in text format for inspection.
 reconstruction.write_text(
-    "/media/rishabh/SSD_1/Data/lab_videos_reg/1_20250324_120708_frames_10_fps/dense/0/sparse"
+    "/media/rishabh/SSD_1/Data/lab_videos_reg/1_b_20250324_120708_frames_10_fps/sparse/0"
 )
 
 # Print all available images and their corresponding IDs in the reconstruction.
@@ -57,13 +55,14 @@ if img is None:
     print(f"Error loading image: {image_path}")
     exit()
 
-# List to store UV coordinates
-uvs = []
+# List to store UV coordinates and corresponding 3D points
+uvs_and_3d_points = []
 
 # Process 3D points and project them onto the selected image
 for point3D_id, point3D in reconstruction.points3D.items():
+    # Project the 3D point to the image
     uv = camera.img_from_cam(close_image.cam_from_world * point3D.xyz)
-    uvs.append(uv[0])
+    uvs_and_3d_points.append((point3D.xyz, uv[0]))  # Store both 3D point and UV coordinates
 
     # Convert UV coordinates to integer pixel values
     u, v = int(uv[0][0]), int(uv[0][1])
@@ -75,12 +74,12 @@ for point3D_id, point3D in reconstruction.points3D.items():
 cv2.imwrite(output_path, img)
 print(f"Image with UV points saved at: {output_path}")
 
-# Save UV coordinates to a CSV file
-uv_file_path = f"{output_dir}/{close_image.name.split('.')[0]}_uv_coordinates.csv"
+# Save UV coordinates and corresponding 3D points to a CSV file
+uv_file_path = f"{output_dir}/{close_image.name.split('.')[0]}_uv_coordinates_3d.csv"
 with open(uv_file_path, mode='w', newline='') as file:
     writer = csv.writer(file)
-    writer.writerow(["UV_X", "UV_Y"])  # CSV header row
-    for (u, v) in uvs:
-        writer.writerow([u, v])
+    writer.writerow(["X_3D", "Y_3D", "Z_3D", "UV_X", "UV_Y"])  # CSV header row
+    for (point3D, uv) in uvs_and_3d_points:
+        writer.writerow([point3D[0], point3D[1], point3D[2], uv[0], uv[1]])
 
-print(f"UV coordinates saved at: {uv_file_path}")
+print(f"UV coordinates and 3D points saved at: {uv_file_path}")

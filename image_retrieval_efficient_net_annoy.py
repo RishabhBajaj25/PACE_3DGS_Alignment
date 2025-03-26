@@ -12,10 +12,10 @@ import csv
 
 # Define base directory paths
 BASE_DIR = '/media/rishabh/SSD_1/Data/lab_videos_reg'
-DATABASE_DIR = os.path.join(BASE_DIR, '1_20250324_120708_frames_10_fps/images')  # Directory containing database images
-QUERY_IMAGE_PATH = os.path.join(BASE_DIR, '2_20250324_120731_frames_10_fps/images/frame_0000.jpg')  # Query image
-OUTPUT_DIR = os.path.join(BASE_DIR, 'similar_images_from_1_20250324_120708_frames_10_fps')  # Output directory for similar images
-CSV_FILE_PATH = os.path.join(BASE_DIR, 'similar_images_from_1_20250324_120708_frames_10_fps.csv')  # CSV output file
+DATABASE_DIR = os.path.join(BASE_DIR, '1_b_20250324_120708_frames_10_fps/images')  # Directory containing database images
+QUERY_IMAGE_PATH = os.path.join(BASE_DIR, '2_b_20250324_120731_frames_10_fps/images/frame_0007.jpg')  # Query image
+OUTPUT_DIR = os.path.join(BASE_DIR, 'similar_images_from_1_b_20250324_120708_frames_10_fps', QUERY_IMAGE_PATH.split('/')[-1].split('.')[0])  # Output directory for similar images
+CSV_FILE_PATH = os.path.join(OUTPUT_DIR, 'similar_images_from_1_b_20250324_120708_frames_10_fps.csv')  # CSV output file
 
 # Ensure the output directory exists
 os.makedirs(OUTPUT_DIR, exist_ok=True)
@@ -103,7 +103,7 @@ with open(CSV_FILE_PATH, mode='w', newline='') as csv_file:
         # Write results to CSV
         csv_writer.writerow([i + 1, QUERY_IMAGE_PATH, similar_image_filename, similar_image_path, distance])
 
-        print(f"Similar Image {i + 1}: Distance - {distance}")
+        print(f"Similar Image {i + 1}: Distance - {distance}. Name: {similar_image_filename}")
 
 cv2.waitKey(0)
 cv2.destroyAllWindows()

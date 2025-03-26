@@ -1,11 +1,11 @@
 import cv2
 import os
 # Path to the video file
-video_path = '/media/rishabh/SSD_1/Data/lab_videos_reg/2_20250324_120731.mp4'
+video_path = '/media/rishabh/SSD_1/Data/plant/20250326_123143.mp4'
 # Directory to save the frames
 every_nth_frame = 10
 
-save_dir = os.path.join('/media/rishabh/SSD_1/Data/lab_videos_reg', os.path.splitext(os.path.basename(video_path))[0] + '_frames_' + str(every_nth_frame) + '_fps')
+save_dir = os.path.join('/media/rishabh/SSD_1/Data/plant', os.path.splitext(os.path.basename(video_path))[0] + '_frames_' + str(every_nth_frame) + '_fps')
 os.makedirs(save_dir, exist_ok=True)
 
 # Open the video file

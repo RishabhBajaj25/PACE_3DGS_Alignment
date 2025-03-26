@@ -40,11 +40,14 @@ This project performs the alignment of two Gaussian splats in either the visible
    Run `project_2_image.py` to project $(X_1)$ onto $(I_{\text{close}}^{M1} $).
 
 5. **Find matching points between query and closest image**  
-   Run `closest_feature_matcher.py` to detect points in $(I_{\text{query}}^{M2}$) that match the projected points in $( I_{\text{close}}^{M1} $).
-
+   Run `calc_m2_X1.py` to detect points in $(I_{\text{query}}^{M2}$) that match the projected points in $( I_{\text{close}}^{M1} $).
+6. **Estimate pose using PnP**  
+   Run `test_PnP.py` to estimate the rotation and translation vectors. (Doesn't work well, more testing required)
+7. **Determine scale from camera positions**  
+   * Run `check_scale.py` to get an estimate of scales. For now, the scaling factor between 2_b and 1_b dataset, measured manually is ~3.262 but this files gives ~1, fix this.
+   * This file also plots the camera positions in 3D space.
+   
 **TODO:** 
 
-* Triangulate the common points in $( I_{\text{close}} $) and $( I_{\text{query}} $) to get their 3D positions, $( X_{\text{common}} $).
-* **Estimate pose using PnP**: Use `solvePnPRANSAC(X_common, x_common_M2, K2, distCoeffs)` to estimate the rotation and translation vectors.
-* **Determine scale from camera positions**: Develop a method to compute scales using camera positions.
+* Try a new dataset with sufficient overlap and simple scene.
 
