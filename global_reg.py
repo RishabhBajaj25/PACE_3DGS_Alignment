@@ -3,6 +3,9 @@ from utils import *
 base_dir = "/media/rishabh/SSD_1/Data/Table_vid_reg"
 output_dir = osp.join(base_dir, "project_2_images")
 
+scaled_M2_path = osp.join(output_dir, "scaled_M2.ply")
+scaled_M2 = o3d.io.read_point_cloud(scaled_M2_path)
+
 # Load the reconstruction from the specified directory.
 reconstruction2 = pycolmap.Reconstruction(
     # "/media/rishabh/SSD_1/Data/lab_videos_reg/2_b_20250324_120731_frames_10_fps/sparse/0"
@@ -64,6 +67,8 @@ P2 = K2 @ ext_mat2[:3, :]
 result_T_m1_m2 = transformation_matrix @ np.linalg.inv(ext_mat2)
 
 result_T_m2_m1 = np.linalg.inv(result_T_m1_m2) # Apply this to M2 AFTER scaling
+scaled_M2.transform(result_T_m2_m1)
+o3d.io.write_point_cloud(osp.join(output_dir, "scaled_M2_transformed.ply"), scaled_M2)
 
 # result_b = transformation_matrix @ ext_mat2
 # result_b_inverse = np.linalg.inv(result_b)
