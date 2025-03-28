@@ -56,5 +56,3 @@ print("Scale:", scale)
 dense2_pcd = open3d.io.read_point_cloud(dense2_path)
 dense2_pcd.scale(scale, center = [0,0,0])
 open3d.io.write_point_cloud(osp.join(output_path, 'scaled_M2.ply'), dense2_pcd)
-
-open3d.io.read_point_cloud(dense2_path).scale(scale).write('/media/rishabh/SSD_1/Data/Table_vid_reg/project_2_images/test.ply')
