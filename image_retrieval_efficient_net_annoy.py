@@ -11,11 +11,14 @@ import csv
 # File to retrieve similar images from a database
 
 # Define base directory paths
-BASE_DIR = '/media/rishabh/SSD_1/Data/lab_videos_reg'
-DATABASE_DIR = os.path.join(BASE_DIR, '1_b_20250324_120708_frames_10_fps/images')  # Directory containing database images
-QUERY_IMAGE_PATH = os.path.join(BASE_DIR, '2_b_20250324_120731_frames_10_fps/images/frame_0007.jpg')  # Query image
-OUTPUT_DIR = os.path.join(BASE_DIR, 'similar_images_from_1_b_20250324_120708_frames_10_fps', QUERY_IMAGE_PATH.split('/')[-1].split('.')[0])  # Output directory for similar images
-CSV_FILE_PATH = os.path.join(OUTPUT_DIR, 'similar_images_from_1_b_20250324_120708_frames_10_fps.csv')  # CSV output file
+BASE_DIR = '/media/rishabh/SSD_1/Data/Table_vid_reg'
+DATABASE_DIR = os.path.join(BASE_DIR, 'sub_1_20250327_143742_frames_5_fps/1/images')  # Directory containing database (close images, M1)
+QUERY_IMAGE_PATH = os.path.join(BASE_DIR, 'sub_1_20250327_143742_frames_5_fps/2/images/frame_0032.jpg')  # Query image
+# OUTPUT_DIR = os.path.join(BASE_DIR, 'similar_images_from_1_b_20250324_120708_frames_10_fps', QUERY_IMAGE_PATH.split('/')[-1].split('.')[0])  # Output directory for similar images
+OUTPUT_DIR = os.path.join(BASE_DIR, 'similar_images_from_1', QUERY_IMAGE_PATH.split('/')[-1].split('.')[0])  # Output directory for similar images
+
+# CSV_FILE_PATH = os.path.join(OUTPUT_DIR, 'similar_images_from_1_b_20250324_120708_frames_10_fps.csv')  # CSV output file
+CSV_FILE_PATH = os.path.join(OUTPUT_DIR, 'similar_images_from_1.csv')  # CSV output file
 
 # Ensure the output directory exists
 os.makedirs(OUTPUT_DIR, exist_ok=True)

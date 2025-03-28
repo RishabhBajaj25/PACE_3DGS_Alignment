@@ -8,9 +8,9 @@ import numpy as np
 import matplotlib.pyplot as plt
 from mpl_toolkits.mplot3d import Axes3D
 import open3d
+import os.path as osp
 
 # https://gist.github.com/enjoylife/01356c4f553411aeaf7dca54eace0706#file-triangulation-py-L9
-
 def triangulate_nviews(P, ip):
     """
     Triangulate a point visible in n camera views.
@@ -174,3 +174,79 @@ def draw_camera(K, R, t, w, h, scale=1, color=[0.8, 0.2, 0.8]):
     # return as list in Open3D format
     return [axis, plane, line_set]
 
+def save_matrices_to_txt(filename, matrices):
+    with open(filename, "w") as f:
+        for name, matrix in matrices.items():
+            f.write(f"{name}:\n")
+            np.savetxt(f, matrix, fmt="%.6f")
+            f.write("\n" + "-" * 40 + "\n")
+
+def load_reconstruction(reconstruction_path):
+    reconstruction = pycolmap.Reconstruction(reconstruction_path)
+    image_names = {image.name: image_id - 1 for image_id, image in reconstruction.images.items()}
+    return reconstruction, image_names
+
+def get_camera_and_pose(reconstruction, image_name, frames):
+    for image_id, image in reconstruction.images.items():
+        if image.name == image_name:
+            image_now = image
+            break
+
+    camera = reconstruction.cameras[image_now.camera.camera_id]
+
+    K = np.array([
+        [camera.focal_length_x, 0, camera.principal_point_x],
+        [0, camera.focal_length_y, camera.principal_point_y],
+        [0, 0, 1]
+    ])
+
+    rot_qvec = image.cam_from_world.rotation.quat
+    rot_qvec = np.roll(rot_qvec, shift=1)  # Adjust for COLMAP format
+
+    rot_mat = qvec2rotmat(rot_qvec)
+
+    trans_vec_ = image.cam_from_world.translation.T
+    trans_vec = -rot_mat.T @ (trans_vec_)
+
+    rot_mat = rot_mat.T
+
+    ext_mat = np.vstack((np.hstack((rot_mat, trans_vec.reshape(-1, 1))), [0, 0, 0, 1]))
+    P = K @ ext_mat[:3, :]
+
+    # Draw the camera model (axis, plane, pyramid)
+    cam_model = draw_camera(K, rot_mat, trans_vec, camera.width, camera.height, 1)
+    frames.extend(cam_model)
+
+    return K, rot_mat, trans_vec, ext_mat, P, frames
+
+def process_point_cloud(reconstruction, min_track_len, remove_statistical_outlier=True):
+    pcd = open3d.geometry.PointCloud()
+
+    xyz = []
+    rgb = []
+    for point3D in reconstruction.points3D.values():
+        track_len = len(point3D.track.elements)
+        if track_len < min_track_len:
+            continue
+        xyz.append(point3D.xyz)
+        rgb.append(point3D.color / 255)
+
+    pcd.points = open3d.utility.Vector3dVector(xyz)
+    pcd.colors = open3d.utility.Vector3dVector(rgb)
+
+    # Remove obvious outliers if enabled
+    if remove_statistical_outlier:
+        [pcd, _] = pcd.remove_statistical_outlier(nb_neighbors=20, std_ratio=2.0)
+
+    return pcd
+
+def visualize_point_cloud_and_frames(pcd, frames):
+    vis = open3d.visualization.Visualizer()
+    vis.create_window()
+    vis.add_geometry(pcd)
+    for frame in frames:
+        vis.add_geometry(frame)
+    vis.poll_events()
+    vis.update_renderer()
+    vis.run()
+    vis.destroy_window()

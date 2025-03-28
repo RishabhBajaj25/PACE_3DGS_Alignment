@@ -1,45 +1,13 @@
-import pycolmap
-import cv2
-import numpy as np
-import pandas as pd
-import os.path as osp
-# Function to save matrices in a human-readable format
-def save_matrices_to_txt(filename, matrices):
-    with open(filename, "w") as f:
-        for name, matrix in matrices.items():
-            f.write(f"{name}:\n")
-            np.savetxt(f, matrix, fmt="%.6f")
-            f.write("\n" + "-" * 40 + "\n")
+from utils import *
 
-
-# https://github.com/colmap/colmap/blob/main/scripts/python/read_write_model.py#L53
-def qvec2rotmat(qvec):
-    return np.array(
-        [
-            [
-                1 - 2 * qvec[2] ** 2 - 2 * qvec[3] ** 2,
-                2 * qvec[1] * qvec[2] - 2 * qvec[0] * qvec[3],
-                2 * qvec[3] * qvec[1] + 2 * qvec[0] * qvec[2],
-            ],
-            [
-                2 * qvec[1] * qvec[2] + 2 * qvec[0] * qvec[3],
-                1 - 2 * qvec[1] ** 2 - 2 * qvec[3] ** 2,
-                2 * qvec[2] * qvec[3] - 2 * qvec[0] * qvec[1],
-            ],
-            [
-                2 * qvec[3] * qvec[1] - 2 * qvec[0] * qvec[2],
-                2 * qvec[2] * qvec[3] + 2 * qvec[0] * qvec[1],
-                1 - 2 * qvec[1] ** 2 - 2 * qvec[2] ** 2,
-            ],
-        ]
-    )
-
-output_dir = "/media/rishabh/SSD_1/Data/lab_videos_reg/project_2_images"
-
+base_dir = "/media/rishabh/SSD_1/Data/Table_vid_reg"
+output_dir = osp.join(base_dir, "project_2_images")
 
 # Load the reconstruction from the specified directory.
 reconstruction2 = pycolmap.Reconstruction(
-    "/media/rishabh/SSD_1/Data/lab_videos_reg/2_b_20250324_120731_frames_10_fps/sparse/0"
+    # "/media/rishabh/SSD_1/Data/lab_videos_reg/2_b_20250324_120731_frames_10_fps/sparse/0"
+    # '/media/rishabh/SSD_1/Data/Table_vid_reg/sub_1_20250327_143742_frames_5_fps/2/sparse/0'
+    osp.join(base_dir, "sub_1_20250327_143742_frames_5_fps/2/sparse/0")
 )
 
 image_names2 = {}
@@ -47,7 +15,7 @@ for image_id, image in reconstruction2.images.items():
     image_names2[image.name] = image_id - 1  # Adjust to 0-based index
 
 # Static selection of image number (change this as needed)
-query_image_number = 0  # Example: selecting image 27
+query_image_number = 25  # Example: selecting image 27
 
 # Format the image name based on the number (e.g., converts 27 to 'frame_0027.jpg')
 query_image_name = f"frame_{query_image_number:04d}.jpg"
@@ -95,20 +63,18 @@ P2 = K2 @ ext_mat2[:3, :]
 
 result_T_m1_m2 = transformation_matrix @ np.linalg.inv(ext_mat2)
 
-result_inverse = np.linalg.inv(result_T_m1_m2)
+result_T_m2_m1 = np.linalg.inv(result_T_m1_m2) # Apply this to M2 AFTER scaling
 
-result_b = transformation_matrix @ ext_mat2
-result_b_inverse = np.linalg.inv(result_b)
-
+# result_b = transformation_matrix @ ext_mat2
+# result_b_inverse = np.linalg.inv(result_b)
 
 # Save matrices
-save_matrices_to_txt("/media/rishabh/SSD_1/Data/lab_videos_reg/archive_first_trial_results/results/saved_matrices.txt", {
+save_matrices_to_txt(osp.join(output_dir, "saved_matrices.txt"), {
     "result_T_m1_m2": result_T_m1_m2,
-    "result_inverse": result_inverse,
-    "result_b": result_b,
-    "result_b_inverse": result_b_inverse
+    "result_T_m2_m1": result_T_m2_m1,
+    # "result_b": result_b,
+    # "result_b_inverse": result_b_inverse
 })
 
 print("Matrices saved in 'saved_matrices.txt' successfully!")
-
 print("Transformation matrix found!")

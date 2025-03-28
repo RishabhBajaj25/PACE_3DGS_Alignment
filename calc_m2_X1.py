@@ -8,12 +8,20 @@ import matplotlib.pyplot as plt
 
 # This script detects keypoints in the query image that match the projected points in the closest image.
 # The resulting matched points will be used for solving the PnP problem.
+# First match the feature points in both images, then associate them with the 3D points using pixel distance.
 
 # Set the output directory for saving results
-output_dir = "/media/rishabh/SSD_1/Data/lab_videos_reg/project_2_images"
+output_dir = "/media/rishabh/SSD_1/Data/Table_vid_reg/project_2_images"
+
+M1_database = "/media/rishabh/SSD_1/Data/Table_vid_reg/sub_1_20250327_143742_frames_5_fps/1"
+M2_database = "/media/rishabh/SSD_1/Data/Table_vid_reg/sub_1_20250327_143742_frames_5_fps/2"
 
 # Load the query image (frame to be matched)
-query_img_path = "/media/rishabh/SSD_1/Data/lab_videos_reg/2_b_20250324_120731_frames_10_fps/images/frame_0000.jpg"
+# Static selection of image number (change this as needed)
+query_image_number = 32  # Example: selecting image 27
+query_image_name = f"frame_{query_image_number:04d}.jpg"
+
+query_img_path = osp.join(M2_database, f"images/{query_image_name}")
 query_img = cv2.imread(query_img_path)
 
 if query_img is None:
@@ -21,12 +29,11 @@ if query_img is None:
     exit()
 
 # Define the closest image number to the query frame
-selected_image_number = 27  # Example: This is a manually chosen image
+closest_image_number = 32  # Example: This is a manually chosen image
 
 # Construct the filename of the closest matching image
-selected_image_name = f"frame_{selected_image_number:04d}.jpg"
-M1_database = "/media/rishabh/SSD_1/Data/lab_videos_reg/1_b_20250324_120708_frames_10_fps/images"
-closest_img_path = osp.join(M1_database, selected_image_name)
+closest_image_name = f"frame_{closest_image_number:04d}.jpg"
+closest_img_path = osp.join(M1_database, closest_image_name)
 
 # Load the closest matching image
 closest_img = cv2.imread(closest_img_path)
@@ -84,7 +91,7 @@ close_matched_points = np.float32([kp1[m[0].queryIdx].pt for m in inliers]).resh
 query_matched_points = np.float32([kp2[m[0].trainIdx].pt for m in inliers]).reshape(-1, 1, 2)[:, 0, :]
 
 # Load the precomputed UV coordinates and 3D points from a CSV file
-csv_path = osp.join(output_dir, f"{selected_image_name.split('.')[0]}_uv_coordinates_3d.csv")
+csv_path = osp.join(output_dir, f"{closest_image_name.split('.')[0]}_uv_coordinates_3d.csv")
 XYZ_uv_coordinates = pd.read_csv(csv_path)
 
 # Lists to store matched values
