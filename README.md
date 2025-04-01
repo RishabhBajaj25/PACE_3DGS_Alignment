@@ -1,6 +1,6 @@
-# Gaussian Splat Alignment in Visible and X-Ray Space
+# Gaussian Splat Alignment in Visible Space
 
-This project performs the alignment of two Gaussian splats in either the visible or X-ray domain. The work was conducted while affiliated with the National Institute of Informatics.
+This project performs the alignment of two Gaussian splats in either the visible or X-ray domain. Current implementation only works with 2 3DGS in visible RGB space. The work was conducted while affiliated with the National Institute of Informatics.
 
 ## Steps
 
