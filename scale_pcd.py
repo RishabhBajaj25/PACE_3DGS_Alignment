@@ -1,3 +1,5 @@
+import numpy as np
+
 from utils import *
 
 min_track_len = 3
@@ -52,7 +54,7 @@ query_dist = np.linalg.norm(query_trans_vec_a - query_trans_vec_b)
 # Calculate scale
 scale = close_dist / query_dist
 print("Scale:", scale)
-
+np.savetxt(osp.join(output_path, 'scale.txt'), [scale])
 dense2_pcd = open3d.io.read_point_cloud(dense2_path)
 dense2_pcd.scale(scale, center = [0,0,0])
 open3d.io.write_point_cloud(osp.join(output_path, 'scaled_M2.ply'), dense2_pcd)

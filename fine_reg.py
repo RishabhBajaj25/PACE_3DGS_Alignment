@@ -40,6 +40,24 @@ print("ICP Transformation Matrix:")
 print(icp_result.transformation)
 draw_registration_result(source_clean, target_clean, icp_result.transformation)
 
+rot = R.from_matrix(icp_result.transformation[:3,:3])
+euler_angles = rot.as_euler('zyx', degrees=False)
+
+# Open the CSV file for writing
+with open(osp.join(output_dir, "fine_reg_result.csv"), mode='w', newline='') as file:
+    writer = csv.writer(file)
+
+    # Write matrix result_T_m1_m2
+    writer.writerow(["icp_result.transformation"])
+    for row in icp_result.transformation:
+        writer.writerow(row)
+
+    writer.writerow([])  # Blank line separator
+
+    # Write Euler angles
+    writer.writerow(["euler_angles_zyx"])
+    writer.writerow(euler_angles)
+
 # Save the aligned point cloud
 output_path = osp.join(output_dir, "aligned_M2.ply")
 o3d.io.write_point_cloud(output_path, source_clean.transform(icp_result.transformation))

@@ -48,7 +48,7 @@ Note: Query map is always with a subscript of 2 and the closest map is with a su
 6. **Estimate scale**  
    Run `scale_pcd.py` to estimate the scaling factor for $M_2$. We need at least a pair of query images and corresponding closest images to estimate this. Since we know what the camera pose of an image is in both the maps, by using image retrieval, the ratio of the distance between the camera centers returns the scaling factor for them.
 7. **Estimate transformation using PnP**
-   * Run `global_reg.py` to estimate the rotation and translation vectors. (Doesn't work well, more testing required)
+   * Run `global_reg.py` to estimate the rotation and translation vectors. (Doesn't work too well, more testing required)
 8. **Estimate transformation using ICP**  
    * Run `fine_reg.py` to estimate the rotation and translation vectors using ICP. (Dependent on the threshold value, more testing required)
 
@@ -56,5 +56,5 @@ Note: Query map is always with a subscript of 2 and the closest map is with a su
 **TODO:** 
 
 * Check this: the scaling factor between 2_b and 1_b dataset, measured manually is ~3.262 but this files gives ~1.
-* How to implement this transformation to the Gaussian splats?
+* ~~How to implement this transformation to the Gaussian splats?~~: Implemented under gaussian_splatting-lightning in `apply_transform.py`
 

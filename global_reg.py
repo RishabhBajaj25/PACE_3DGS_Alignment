@@ -67,19 +67,49 @@ P2 = K2 @ ext_mat2[:3, :]
 result_T_m1_m2 = transformation_matrix @ np.linalg.inv(ext_mat2)
 
 result_T_m2_m1 = np.linalg.inv(result_T_m1_m2) # Apply this to M2 AFTER scaling
+
+rot = R.from_matrix(result_T_m2_m1[:3,:3])
+# rot_transformed = np.eye(4)
+# rot_transformed[:3,:3] = rot.as_matrix()
+# scaled_M2.transform(rot_transformed)
+# o3d.io.write_point_cloud(osp.join(output_dir, "rot_scaled_M2.ply"), scaled_M2)
+
+euler_angles = rot.as_euler('zyx', degrees=False)
+
 scaled_M2.transform(result_T_m2_m1)
 o3d.io.write_point_cloud(osp.join(output_dir, "scaled_M2_transformed.ply"), scaled_M2)
 
-# result_b = transformation_matrix @ ext_mat2
-# result_b_inverse = np.linalg.inv(result_b)
+scale = np.loadtxt(osp.join(output_dir, "scale.txt"))
 
-# Save matrices
-save_matrices_to_txt(osp.join(output_dir, "saved_matrices.txt"), {
-    "result_T_m1_m2": result_T_m1_m2,
-    "result_T_m2_m1": result_T_m2_m1,
-    # "result_b": result_b,
-    # "result_b_inverse": result_b_inverse
-})
+# Open the CSV file for writing
+with open(osp.join(output_dir, "global_reg_result.csv"), mode='w', newline='') as file:
+    writer = csv.writer(file)
 
-print("Matrices saved in 'saved_matrices.txt' successfully!")
+    # Write the scale value as a header
+    writer.writerow(["scale"])
+
+    # Write the scale value (as a single row)
+    writer.writerow([scale])
+
+    writer.writerow([])  # Blank line separator
+
+    # Write matrix result_T_m1_m2
+    writer.writerow(["result_T_m1_m2"])
+    for row in result_T_m1_m2:
+        writer.writerow(row)
+
+    writer.writerow([])  # Blank line separator
+
+    # Write matrix result_T_m2_m1
+    writer.writerow(["result_T_m2_m1"])
+    for row in result_T_m2_m1:
+        writer.writerow(row)
+
+    writer.writerow([])  # Blank line separator
+
+    # Write Euler angles
+    writer.writerow(["euler_angles_zyx"])
+    writer.writerow(euler_angles)
+
+print(f"Matrices and Euler angles saved successfully!")
 print("Transformation matrix found!")
