@@ -36,14 +36,14 @@ project/
 ```
 
 ### 3. Retrieve the Closest Images
-Select a query image from **M2** $ ( I_{\text{query}}^{M2} ) $ and run `image_retrieval_efficient_net_annoy.py` to find the closest corresponding images from **M1**.
+Select a query image from **M2** $( I_{\text{query}}^{M2} )$ and run `image_retrieval_efficient_net_annoy.py` to find the closest corresponding images from **M1**.
 
 ### 4. Project 3D Points onto the Closest Image
-Run `project_2_image.py` to project $ X_1 $ onto $ I_{\text{close}}^{M1} $.
+Run `project_2_image.py` to project $X_1$ onto $I_{\text{close}}^{M1}$.
 
 ### 5. Find Matching Points Between the Query and Closest Image
-- Run `calc_m2_X1.py` to detect matching points between $ I_{\text{query}}^{M2} $ and the projected points in $ I_{\text{close}}^{M1} $.
-- The script first detects feature matches between `image_query` and `image_closest`. It then filters matches that are within a 5-pixel distance from the projected points and uses these correspondences to estimate $ X $ for the Perspective-n-Point (PnP) problem.
+- Run `calc_m2_X1.py` to detect matching points between $I_{\text{query}}^{M2}$ and the projected points in $I_{\text{close}}^{M1}$.
+- The script first detects feature matches between `image_query` and `image_closest`. It then filters matches that are within a 5-pixel distance from the projected points and uses these correspondences to estimate $X$ for the Perspective-n-Point (PnP) problem.
 
 ### 6. Estimate Scale
 Run `scale_pcd.py` to estimate the scaling factor for **M2**. At least one pair of query and closest images is required to compute this. Since the camera poses in both maps are known, the ratio of distances between the camera centers provides the scaling factor.
