@@ -1,60 +1,69 @@
 # Gaussian Splat Alignment in Visible Space
 
-This project performs the alignment of two Gaussian splats in either the visible or X-ray domain. Current implementation only works with 2 3DGS in visible RGB space. The work was conducted while affiliated with the National Institute of Informatics.
+This project focuses on aligning two Gaussian splats within either the visible or X-ray domain. The current implementation supports alignment of two 3DGS datasets in the visible RGB space. This work was conducted while affiliated with the National Institute of Informatics.
 
-## Steps
+## Workflow
 
-Note: Query map is always with a subscript of 2 and the closest map is with a subscript of 1.
+**Note:** The query map is always denoted with a subscript of **2**, while the closest map is denoted with a subscript of **1**.
 
-1. **Extract frames from the video**  
-   Run `extract_img_frames.py` to extract image frames.
+### 1. Extract Frames from the Video
+Run `extract_img_frames.py` to extract image frames from the video.
 
-2. **Run COLMAP**  
-   * Define the path to the images and the output path. 
-   * Ensure that the camera model is set to **pinhole**. 
-   * Put images directly in the directory, DONOT create an `images` folder (creates problems with dense recon).
-   * Directory structure should be as follows. If needed, make a folder named `0` and cut/paste the .bin files into it.
-   ```
-   project/
-   ├── images/
-   ├── sparse/
-   │   └── 0/
-   │       ├── cameras.bin
-   │       ├── images.bin
-   │       └── points3d.bin
-   ├── stereo/
-   ├── db.db
-   ├── frame_0000.jpg
-   ├── frame_0001.jpg
-   ...
-   ├── frame_0042.jpg
-   ├── Fused.ply
-   ├── Fused.ply.vis
-   ├── run-colmap-geometric.sh
-   └── run-colmap-photometric.sh
-   ```
+### 2. Run COLMAP
+- Define the path to the images and specify the output directory.
+- Set the camera model to **pinhole**.
+- Place images directly in the directory; **do not** create an `images` folder, as this may cause issues with dense reconstruction.
+- Ensure the directory structure follows this format. If necessary, create a folder named `0` and move the `.bin` files into it:
 
-    
-3. **Retrieve the closest images**  
-   Select a query image from **M2** (denoted as $( I_{\text{query}}^{M2} ))$ and run `image_retrieval_efficient_net_annoy.py` to find the closest images from **M1**.
+```
+project/
+├── images/
+├── sparse/
+│   └── 0/
+│       ├── cameras.bin
+│       ├── images.bin
+│       └── points3d.bin
+├── stereo/
+├── db.db
+├── frame_0000.jpg
+├── frame_0001.jpg
+...
+├── frame_0042.jpg
+├── Fused.ply
+├── Fused.ply.vis
+├── run-colmap-geometric.sh
+└── run-colmap-photometric.sh
+```
 
-4. **Project 3D points onto the closest image**  
-   Run `project_2_image.py` to project $(X_1)$ onto $(I_{\text{close}}^{M1} $).
+### 3. Retrieve the Closest Images
+Select a query image from **M2** $ ( I_{\text{query}}^{M2} ) $ and run `image_retrieval_efficient_net_annoy.py` to find the closest corresponding images from **M1**.
 
-5. **Find matching points between query and closest image**
-   * Run `calc_m2_X1.py` to detect points in $(I_{\text{query}}^{M2}$) that match the projected points in $( I_{\text{close}}^{M1} $).
-   * First matches the feature points between *image_query* and *image_closest*. Then it checks which of these matches are close to the projected points (within 5px distance). Usies these points and their corresponding 3D points to get X for the PnP problem.
+### 4. Project 3D Points onto the Closest Image
+Run `project_2_image.py` to project $ X_1 $ onto $ I_{\text{close}}^{M1} $.
 
-6. **Estimate scale**  
-   Run `scale_pcd.py` to estimate the scaling factor for $M_2$. We need at least a pair of query images and corresponding closest images to estimate this. Since we know what the camera pose of an image is in both the maps, by using image retrieval, the ratio of the distance between the camera centers returns the scaling factor for them.
-7. **Estimate transformation using PnP**
-   * Run `global_reg.py` to estimate the rotation and translation vectors. (Doesn't work too well, more testing required)
-8. **Estimate transformation using ICP**  
-   * Run `fine_reg.py` to estimate the rotation and translation vectors using ICP. (Dependent on the threshold value, more testing required)
+### 5. Find Matching Points Between the Query and Closest Image
+- Run `calc_m2_X1.py` to detect matching points between $ I_{\text{query}}^{M2} $ and the projected points in $ I_{\text{close}}^{M1} $.
+- The script first detects feature matches between `image_query` and `image_closest`. It then filters matches that are within a 5-pixel distance from the projected points and uses these correspondences to estimate $ X $ for the Perspective-n-Point (PnP) problem.
 
-   
-**TODO:** 
+### 6. Estimate Scale
+Run `scale_pcd.py` to estimate the scaling factor for **M2**. At least one pair of query and closest images is required to compute this. Since the camera poses in both maps are known, the ratio of distances between the camera centers provides the scaling factor.
 
-* Check this: the scaling factor between 2_b and 1_b dataset, measured manually is ~3.262 but this files gives ~1.
-* ~~How to implement this transformation to the Gaussian splats?~~: Implemented under gaussian_splatting-lightning in `apply_transform.py`
+### 7. Estimate Transformation Using PnP
+Run `global_reg.py` to estimate the rotation and translation vectors. *(Further testing is required, as results are inconsistent.)*
 
+### 8. Refine Transformation Using ICP
+Run `fine_reg.py` to refine the rotation and translation vectors using Iterative Closest Point (ICP). *(Results are dependent on threshold values; further validation is needed.)*
+
+---
+
+## To-Do List
+
+- **Verify Scaling Factor:** The manually measured scaling factor between `2_b` and `1_b` datasets is approximately **3.262**, but the computed value is around **1**. Further investigation is required.
+- ~~**Apply Transformation to Gaussian Splats:**~~ Implemented under `gaussian_splatting-lightning` in `apply_transform.py`. Link: [apply_transform.py](https://github.com/RishabhBajaj25/gaussian-splatting-lightning/blob/gaussian_tf/apply_transform.py).
+
+---
+
+## Additional Tools
+
+- **SuperSplat**: Used for visualizing Gaussian splats. [GitHub Repository](https://github.com/RishabhBajaj25/supersplat/tree/main)
+- **3DGS Converter**: Converts Gaussian splats to point clouds, facilitating visualization in MeshLab and comparison of COLMAP localization results with Gaussian splat localization. [GitHub Repository](https://github.com/RishabhBajaj25/3dgsconverter)
