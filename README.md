@@ -58,8 +58,9 @@ Run `fine_reg.py` to refine the rotation and translation vectors using Iterative
 
 ## To-Do List
 
+- **Potential Accuracy Improvement**: Average out the scale (scalar), the rotation and translation vectors from multiple query images to improve accuracy.
 - **Verify Scaling Factor:** The manually measured scaling factor between `2_b` and `1_b` datasets is approximately **3.262**, but the computed value is around **1**. Further investigation is required.
-- ~~**Apply Transformation to Gaussian Splats:**~~ Implemented under `gaussian_splatting-lightning` in `apply_transform.py`. Link: [apply_transform.py](https://github.com/RishabhBajaj25/gaussian-splatting-lightning/blob/gaussian_tf/apply_transform.py).
+- ~~**Apply Transformation to Gaussian Splats:**~~ Implemented under `gaussian_splatting-lightning` in `apply_transform.py`. Link: [apply_transform.py](https://github.com/RishabhBajaj25/gaussian-splatting-lightning/blob/main/utils/apply_transform.py).
 
 ---
 
