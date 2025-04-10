@@ -1,6 +1,6 @@
 # Gaussian Splat Alignment in Visible Space
 
-This branch is for aligning R2Gaussian and Gaussian Splat using manual points picked in cloud compare, It generates files that utils/apply_transform.py can use to apply the transformation to the Gaussian splats. The transformation is applied to the Gaussian splats in the `gaussian_splatting-lightning` repository. The code is not yet fully functional, but it serves as a starting point for future work.
+This branch is for aligning R2Gaussian and Gaussian Splat using manual points picked in cloud compare, It generates files that utils/apply_transform.py can use to apply the transformation to the Gaussian splats. The transformation is applied to the Gaussian splats in the `gaussian_splatting_lightning` repository. The code is not yet fully functional, but it serves as a starting point for future work.
 
 This project focuses on aligning two Gaussian splats within either the visible or X-ray domain. The current implementation supports alignment of two 3DGS datasets in the visible RGB space. This work was conducted while affiliated with the National Institute of Informatics.
 ## Workflow
