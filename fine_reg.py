@@ -2,9 +2,14 @@ from utils import *
 
 display_original_pcds = False
 # Load two point clouds
-base_dir = "/media/rishabh/SSD_1/Data/Blender_Renders/ct_scan_foot"
-output_dir = osp.join(base_dir, "project_2_images")
 
+# base_dir = "/media/rishabh/SSD_1/Data/Blender_Renders/ct_scan_foot"
+# output_name = "project_2_images"
+
+base_dir = "/home/rishabh/projects/gaussian-splatting/output/bunny_v3/point_cloud/iteration_30000"
+output_name = "blender_tf"
+
+output_dir = osp.join(base_dir, output_name)
 icp_result = np.eye(4)
 
 rot = R.from_matrix(icp_result[:3,:3])
