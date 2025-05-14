@@ -16,8 +16,8 @@ print('cuda is_available:','available' if(torch.cuda.is_available()) else 'unava
 print('device_count:',torch.cuda.device_count())
 print('device_name:',torch.cuda.get_device_name())
 
-parent_dir = '/media/rishabh/SSD_1/Data/Foot_Blue'
-output_dir = os.path.join((parent_dir), 'png_output')
+parent_dir = '/media/rishabh/SSD_1/Data/Blender_Renders/bunny/v3_combined'
+output_dir = os.path.join((parent_dir), 'rembg_output')
 
 # Create the output directory if it doesn't exist
 os.makedirs(output_dir, exist_ok=True)
