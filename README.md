@@ -3,11 +3,11 @@
 This branch is for aligning R2Gaussian and Gaussian Splat using manual points picked in cloud compare, It generates files that utils/apply_transform.py can use to apply the transformation to the Gaussian splats. The transformation is applied to the Gaussian splats in the `gaussian_splatting_lightning` repository. The code is not yet fully functional, but it serves as a starting point for future work.
 
 The current workflow is as follows:
-1. Perform alignment of 2 point clouds (either from 3DGS or R2Gaussian) using CloudCompare desktop app.
-2. Run steps 6, 7 and 8 as below to apply the transformations in point cloud space. 
-3. If using R2Gaussians, convert the `.pickle` files to `.ply` files using [stricter_pickle2ply.py](https://github.com/RishabhBajaj25/r2_gaussian/blob/75c129d1653ee6bfdca2ec74b9aa659e225c0019/stricter_pickle2ply.py)
+1. If using R2Gaussians, convert the `.pickle` files to `.ply` files using [stricter_pickle2ply.py](https://github.com/RishabhBajaj25/r2_gaussian/blob/75c129d1653ee6bfdca2ec74b9aa659e225c0019/stricter_pickle2ply.py)
+2. Perform alignment of 2 point clouds (either from 3DGS or R2Gaussian) using CloudCompare desktop app ([click here](https://www.cloudcompare.org/doc/wiki/index.php/Align)). 
+3. Run steps 6, 7 and 8 as below to apply the transformations in point cloud space. These steps also output csv files which are used in Step 4.
 4. Run [apply_transform.py](https://github.com/RishabhBajaj25/gaussian-splatting-lightning/blob/main/utils/apply_transform.py) in the `gaussian_splatting_lightning` fork. This applies the transformation to the Gaussian splats.
-5. Run [render_stereo.py](https://github.com/RishabhBajaj25/3DGS_PoseRender/blob/main/render_stereo.py) or [render_anaglyph.py](https://github.com/RishabhBajaj25/3DGS_PoseRender/blob/main/create_anaglyph.py) to create renders of the aligned splats. The stereo render will create a stereo image, while the anaglyph render will create a red-cyan anaglyph image.
+5. (Optional) Run [render_stereo.py](https://github.com/RishabhBajaj25/3DGS_PoseRender/blob/main/render_stereo.py) or [render_anaglyph.py](https://github.com/RishabhBajaj25/3DGS_PoseRender/blob/main/create_anaglyph.py) to create renders of the aligned splats. The stereo render will create a stereo image, while the anaglyph render will create a red-cyan anaglyph image.
 
 This project focuses on aligning two Gaussian splats within either the visible or X-ray domain. The current implementation supports alignment of two 3DGS datasets in the visible RGB space. This work was conducted while affiliated with the National Institute of Informatics.
 ## Steps
