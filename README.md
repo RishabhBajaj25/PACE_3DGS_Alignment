@@ -44,10 +44,13 @@ This project uses the following tools:
 8. **Apply Transformation Matrix:**
    Paste the transformation matrix from the alignment in `global_reg.py` and run this script.
 
-9. **Apply Transformation to Gaussians:**
+9. **Perform ICP:**
+   Run `fine_reg.py`.
+
+10. **Apply Transformation to Gaussians:**
    Run [`apply_transform.py`](https://github.com/RishabhBajaj25/gaussian-splatting-lightning/blob/main/utils/apply_transform.py) in the `gaussian_splatting_lightning` fork. This applies the transformation to the Gaussian splats.
 
-10. **(Optional) Create Renders:**
+11. **(Optional) Create Renders:**
     - Run [`render_stereo.py`](https://github.com/RishabhBajaj25/3DGS_PoseRender/blob/main/render_stereo.py) to create a stereo image.
     - Run [`create_anaglyph.py`](https://github.com/RishabhBajaj25/3DGS_PoseRender/blob/main/create_anaglyph.py) to create a red-cyan anaglyph image.
 
