@@ -33,7 +33,7 @@ This project uses the following tools:
    Import these point clouds into [CloudCompare](https://github.com/CloudCompare/CloudCompare/tree/master).
 
 5. **Manual Alignment:**
-   Perform alignment of the 2 point clouds (either from 3DGS or R2Gaussian) manually in CloudCompare.
+   Perform alignment of the 2 point clouds (either from 3DGS or R2Gaussian) manually in CloudCompare [click here for more information on alignment](https://www.cloudcompare.org/doc/wiki/index.php/Alignment_and_Registration).
 
 6. **Save Alignment Results:**
    Save the results of the alignment from the CloudCompare console.
@@ -67,7 +67,10 @@ This project uses the following tools:
 #### 1. Extract Frames from the Video
 Run `extract_img_frames.py` to extract image frames from the video.
 
-#### 2. Run COLMAP
+#### 2. (optional) Extract only sharp frames from the dataset
+After image frames have been extracted from video, run `preprocess.py` [here](https://github.com/RishabhBajaj25/gaussian-splatting/blob/main/preprocess.py) extract only sharp frames from the dataset. This is useful for reducing the number of images and focusing on the most relevant ones.
+
+#### 3. Run COLMAP
 - Define the path to the images and specify the output directory.
 - Set the camera model to **pinhole**.
 - Place images directly in the directory. **Do not** create an `images` folder, as this may cause issues with dense reconstruction.
