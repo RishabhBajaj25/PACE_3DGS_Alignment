@@ -1,0 +1,3 @@
+[submodule "gaussian-splatting-lightning"]
+	path = gaussian-splatting-lightning
+	url = https://github.com/RishabhBajaj25/gaussian-splatting-lightning.git
