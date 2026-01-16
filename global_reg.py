@@ -7,6 +7,7 @@ import csv
 
 base_dir = "/home/pace-ubuntu/datasets/leica/EAST/registration"
 output_name = "rough"
+
 output_dir = osp.join(base_dir, output_name)
 os.makedirs(output_dir, exist_ok=True)
 
@@ -41,9 +42,7 @@ test_M2.scale(scale, center = (0,0,0))
 test_M2.rotate(R, center = (0,0,0))
 test_M2.translate(t)
 
-o3d.io.write_point_cloud(osp.join(output_dir, "transformed_m2.ply"), test_M2)
-
-
+o3d.io.write_point_cloud(osp.join(output_dir, "global_aligned_m2.ply"), test_M2)
 
 # Open the CSV file for writing
 with open(osp.join(output_dir, "global_reg_result.csv"), mode='w', newline='') as file:
