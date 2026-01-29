@@ -33,7 +33,8 @@ import open3d as o3d
 from plyfile import PlyData, PlyElement
 import numpy as np
 
-def euler_zyx_to_matrix(x, y, z):
+def euler_zyx_to_matrix(x, y, z, order= "zyx" ):
+
     cx, cy, cz = np.cos([x, y, z])
     sx, sy, sz = np.sin([x, y, z])
 
@@ -55,7 +56,16 @@ def euler_zyx_to_matrix(x, y, z):
         [0, sx,  cx]
     ])
 
-    return Rz @ Ry @ Rx
+    correction = np.array([
+        [ 0, -1, 0],
+        [ 0,  0, 1],
+        [-1,  0, 0]
+    ])
+    if order == "zyx":
+        return Rz @ Ry @ Rx
+
+    if order == "xyz":
+        return Rx @ Ry @ Rz
 
 
 def rotmat2qvec(R):
@@ -154,8 +164,6 @@ def rescale(gauss, scale: float):
 
         print("rescaled with factor {}".format(scale))
 
-
-
 gs = PlyData.read("/home/pace-ubuntu/datasets/leica/EAST/pycolmap/all_24_horizontal_yaw_strict_match/supersplat_export_50000.ply")
 
 vertex = gs["vertex"]
@@ -165,9 +173,13 @@ print("Vertex properties:")
 for name in vertex.data.dtype.names:
     print(" -", name)
 
-rescale(vertex, 1.0)
-translation(vertex, 0.0, 0.0, 0.0)
-rotate_by_euler_angles(vertex, 0.0, 0.0, np.deg2rad(90))
+rescale(vertex, 1.5483928824968205)
+# rotate_by_euler_angles(vertex, np.deg2rad(-179.91297863256196+90), np.deg2rad(-0.6012315326457325), np.deg2rad(90.20316420347123+90))
+# rotate_by_euler_angles(vertex, np.deg2rad(-179.91297863256196), np.deg2rad(-0.6012315326457325), np.deg2rad(90.20316420347123))
+#
+translation(vertex, -1787.16003, -2714.19702, -177.56863)
+# rotate_by_euler_angles(vertex, np.deg2rad(2), np.deg2rad(2), np.deg2rad(2))
+# translation(vertex, 5, 5, 5)
 
 # Create a new PlyElement from the modified vertex data
 vertex_out = PlyElement.describe(
@@ -180,6 +192,6 @@ for elem in gs.elements:
     if elem.name != "vertex":
         elements.append(elem)
 out_ply = PlyData(elements, text=gs.text)
-out_ply.write("/home/pace-ubuntu/datasets/leica/EAST/transform_tests/rotate.ply")
+out_ply.write("/home/pace-ubuntu/datasets/leica/EAST/transform_tests/translate.ply")
 
 print("Debug")

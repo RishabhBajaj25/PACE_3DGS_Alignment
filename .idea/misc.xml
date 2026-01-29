@@ -3,5 +3,5 @@
   <component name="Black">
     <option name="sdkName" value="3DGS_Alignment" />
   </component>
-  <component name="ProjectRootManager" version="2" project-jdk-name="3DGS_Alignment" project-jdk-type="Python SDK" />
+  <component name="ProjectRootManager" version="2" project-jdk-name="$USER_HOME$/miniconda3/envs/pano_colmap" project-jdk-type="Python SDK" />
 </project>
