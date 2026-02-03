@@ -3,11 +3,9 @@ from scipy.spatial.transform import Rotation as R_scipy
 import open3d as o3d
 import os.path as osp
 import os
-import csv
 
 base_dir = "/home/pace-ubuntu/datasets/leica/EAST/registration"
 output_name = "rough"
-
 output_dir = osp.join(base_dir, output_name)
 os.makedirs(output_dir, exist_ok=True)
 
@@ -42,29 +40,4 @@ test_M2.scale(scale, center = (0,0,0))
 test_M2.rotate(R, center = (0,0,0))
 test_M2.translate(t)
 
-o3d.io.write_point_cloud(osp.join(output_dir, "global_aligned_m2.ply"), test_M2)
-
-# Open the CSV file for writing
-with open(osp.join(output_dir, "global_reg_result.csv"), mode='w', newline='') as file:
-    writer = csv.writer(file)
-
-    # Write the scale value as a header
-    writer.writerow(["scale"])
-    # Write the scale value (as a single row)
-    writer.writerow([scale])
-    writer.writerow([])  # Blank line separator
-    writer.writerow([])  # Blank line separator
-
-    # Write matrix result_T_m2_m1
-    writer.writerow(["result_T_m2_m1"])
-    for row in result_T_m2_m1:
-        writer.writerow(row)
-
-    writer.writerow([])  # Blank line separator
-
-    # Write Euler angles
-    writer.writerow(["euler_angles_zyx"])
-    writer.writerow(euler_angles)
-
-print(f"Matrices and Euler angles saved successfully!")
-print("Transformation matrix obtained from manually aligning the 2pcd using point picking in CloudCompare!")
+o3d.io.write_point_cloud(osp.join(output_dir, "transformed_m2.ply"), test_M2)
