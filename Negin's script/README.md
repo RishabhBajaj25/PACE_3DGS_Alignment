@@ -40,7 +40,12 @@ pip install numpy
 ```bash
 python apply_splat_transform.py input.ply output.ply --matrix transform.npy
 ```
+###Advance 
+Use the advance command (on our recent file experiment) 
+```bash
+python transform_splat_ply.py input_splat.ply output_splat_global.ply --matrix T_global.npy --scale_mode log --quat_order wxyz --compose left
 
+```
 ### Supported matrix formats
 
 * `.npy` containing a **4×4** matrix
