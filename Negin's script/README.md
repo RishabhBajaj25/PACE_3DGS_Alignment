@@ -1,4 +1,6 @@
 # Gaussian Splat PLY Similarity Transform Applier
+```TansformationKeepSplat.py```
+Before running this script make sure to run ``` save_transformation.py``` to have the transformation .npy file avaialable in your local dir. Edit ``` save_transformation.py``` with your own transformation matrix.
 
 This script applies a **4×4 similarity transform** (uniform scale + rotation + translation) to a **Gaussian Splatting PLY** (binary little-endian, float32) in the common “SuperSplat-style” vertex layout.
 
